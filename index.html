@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Virtual ZOLL R Series ALS Trainer</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="layout">
+      <header>
+        <h1>Virtual ZOLL R Series ALS Trainer</h1>
+        <p>
+          Educational simulator with two modules: (1) pad/electrode placement training
+          and (2) a virtual interactive R Series ALS defibrillator.
+        </p>
+      </header>
+
+      <section class="card" aria-labelledby="pad-training-title">
+        <h2 id="pad-training-title">1) Pad/Electrode Placement Trainer</h2>
+        <p class="subtle">
+          Select a pad and click the matching location on the torso diagram.
+        </p>
+
+        <div class="trainer-grid">
+          <fieldset class="pad-selector" aria-label="Pad selector">
+            <legend>Select pad</legend>
+            <label><input type="radio" name="pad" value="sternum" checked /> Sternum pad</label>
+            <label><input type="radio" name="pad" value="apex" /> Apex pad</label>
+            <button id="reset-placement" type="button">Reset placement</button>
+            <p id="placement-status" aria-live="polite">Place both pads to complete training.</p>
+          </fieldset>
+
+          <div class="torso" role="img" aria-label="Torso diagram for pad placement">
+            <button class="placement-zone sternum" data-zone="sternum" type="button" aria-label="Upper right chest placement zone"></button>
+            <button class="placement-zone apex" data-zone="apex" type="button" aria-label="Left lower lateral chest placement zone"></button>
+            <div class="placed-pad sternum" id="placed-sternum" hidden>Sternum</div>
+            <div class="placed-pad apex" id="placed-apex" hidden>Apex</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="defib-title">
+        <h2 id="defib-title">2) Interactive ZOLL R Series ALS Defibrillator</h2>
+        <p class="subtle">
+          The panel starts powered off (blank screen). Use the controls to simulate core workflow.
+        </p>
+
+        <div class="defib" id="defib-shell">
+          <div class="defib-image-wrap">
+            <img
+              class="defib-image"
+              src="https://github.com/user-attachments/assets/30e69544-6771-49bc-98dc-4fd7cee79064"
+              alt="ZOLL R Series ALS defibrillator"
+            />
+            <div class="screen-wrap">
+              <canvas id="ekg-screen" width="520" height="220" aria-label="Defibrillator screen"></canvas>
+              <div class="screen-overlay" id="screen-overlay">OFF</div>
+              <div class="screen-label" id="screen-label">Ready</div>
+              <div class="energy-label" id="energy-label">Energy: 0 J</div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button data-action="power" type="button">Power</button>
+            <button data-action="analyze" type="button">Analyze</button>
+            <button data-action="charge" type="button">Charge</button>
+            <button data-action="shock" type="button" class="shock">Shock</button>
+            <button data-action="pacer" type="button">Pacer</button>
+            <button data-action="lead12" type="button">12-Lead</button>
+          </div>
+        </div>
+
+        <p id="device-status" aria-live="polite">Device is off.</p>
+        <p class="subtle">Default/off-state image now uses the provided R Series ALS device photo.</p>
+      </section>
+
+      <section class="card" aria-labelledby="development-plan-title">
+        <h2 id="development-plan-title">Development Plan + Inputs Needed</h2>
+        <ol>
+          <li>Finalize button map (every physical button/knob and exact expected behavior).</li>
+          <li>Define screen states (power-on, monitor, analyze, charge, shock, pacing, alarms, 12-lead).</li>
+          <li>Implement realistic workflow logic with constraints and prompts.</li>
+          <li>Add scenario engine (e.g., VF/pVT/PEA/asystole and timed responses).</li>
+          <li>Validate clinical/visual accuracy and iterate.</li>
+        </ol>
+        <p class="subtle">
+          To make this accurate, please provide: high-resolution front-panel images (off and on states),
+          button-by-button functional specs, target training scenarios, expected rhythm library, and any
+          required instructional text/scoring rubric.
+        </p>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
