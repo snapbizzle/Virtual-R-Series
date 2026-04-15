@@ -11,6 +11,6 @@ Interactive webapp for a ZOLL R Series defibrillator. App is built for education
 Open `./index.html` in a browser, or run:
 
 ```bash
-cd /home/runner/work/Virtual-R-Series/Virtual-R-Series
+cd Virtual-R-Series
 python -m http.server 4173
 ```

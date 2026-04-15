@@ -22,6 +22,8 @@ const device = {
   phase: 0,
 };
 const VF_PROBABILITY = 0.5;
+const ENERGY_INCREMENT_JOULES = 50;
+const MAX_ENERGY_JOULES = 200;
 
 function selectedPad() {
   return [...padRadios].find((radio) => radio.checked)?.value || 'sternum';
@@ -163,7 +165,7 @@ function handleAction(action) {
       device.rhythm === 'vf' ? 'warn' : 'ok',
     );
   } else if (action === 'charge') {
-    device.energy = Math.min(device.energy + 50, 200);
+    device.energy = Math.min(device.energy + ENERGY_INCREMENT_JOULES, MAX_ENERGY_JOULES);
     device.charged = true;
     setStatus(`Charging complete. Selected energy: ${device.energy} J.`, 'ok');
   } else if (action === 'shock') {
