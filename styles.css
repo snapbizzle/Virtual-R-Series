@@ -1,86 +1,97 @@
+/* ─────────────────────────────────────────────────────────────────
+   Design tokens
+   ───────────────────────────────────────────────────────────────── */
 :root {
-  --bg: #0f172a;
-  --card: #111827;
+  --bg: #020617;
+  --card: #0f172a;
+  --border: #1e3a5f;
   --accent: #38bdf8;
   --ok: #22c55e;
   --warn: #f59e0b;
-  --text: #e5e7eb;
+  --danger: #ef4444;
+  --pacer-color: #14b8a6;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --subtle: #a5b4fc;
 }
 
-* {
-  box-sizing: border-box;
-}
+/* ─────────────────────────────────────────────────────────────────
+   Base reset
+   ───────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
   margin: 0;
-  background: linear-gradient(180deg, #020617, #0b1120);
+  background: linear-gradient(180deg, #020617 0%, #0b1120 100%);
   color: var(--text);
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: 0.9rem;
 }
 
+button {
+  cursor: pointer;
+  border: 1px solid #475569;
+  background: #1e293b;
+  color: var(--text);
+  border-radius: 6px;
+  padding: 0.45rem 0.7rem;
+  font-family: inherit;
+  font-size: 0.82rem;
+  transition: border-color 0.15s, background 0.15s;
+}
+button:hover  { border-color: var(--accent); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button:disabled { opacity: 0.35; cursor: not-allowed; }
+
+h1, h2, h3 { margin-top: 0; }
+
+/* ─────────────────────────────────────────────────────────────────
+   Layout
+   ───────────────────────────────────────────────────────────────── */
 .layout {
-  max-width: 1080px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem 1rem 3rem;
+  padding: 1.5rem 1rem 3rem;
   display: grid;
   gap: 1.2rem;
 }
 
 .card {
-  background: rgba(17, 24, 39, 0.9);
-  border: 1px solid #334155;
-  border-radius: 12px;
-  padding: 1rem;
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.2rem 1.4rem;
 }
 
-h1,
-h2 {
-  margin-top: 0;
-}
+.subtle      { color: var(--subtle); margin-top: 0.25rem; }
+.subtle-inline { color: var(--muted); font-size: 0.78rem; }
+.ok   { color: var(--ok); }
+.warn { color: var(--warn); }
 
-.subtle {
-  color: #a5b4fc;
-  margin-top: 0.3rem;
-}
-
+/* ─────────────────────────────────────────────────────────────────
+   Pad / electrode placement trainer
+   ───────────────────────────────────────────────────────────────── */
 .trainer-grid {
   display: grid;
+  grid-template-columns: 290px 1fr;
   gap: 1rem;
-  grid-template-columns: 280px 1fr;
+  margin-top: 0.75rem;
 }
 
 .pad-selector {
-  border: 1px solid #475569;
+  border: 1px solid #334155;
   border-radius: 10px;
-  padding: 0.8rem;
+  padding: 0.9rem;
   display: grid;
   gap: 0.7rem;
   align-content: start;
 }
-
-.pad-selector label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-button {
-  cursor: pointer;
-  border: 1px solid #64748b;
-  background: #1e293b;
-  color: #e2e8f0;
-  border-radius: 8px;
-  padding: 0.55rem 0.8rem;
-}
-
-button:hover {
-  border-color: var(--accent);
-}
+.pad-selector label { display: flex; align-items: center; gap: 0.5rem; }
 
 .torso {
   position: relative;
   min-height: 330px;
-  border: 1px solid #475569;
+  border: 1px solid #334155;
   border-radius: 12px;
   background:
     radial-gradient(circle at 50% 18%, #fecaca 10%, #fca5a5 24%, transparent 25%),
@@ -95,55 +106,49 @@ button:hover {
   border-radius: 999px;
   background: transparent;
 }
-
-.placement-zone.sternum {
-  top: 60px;
-  left: calc(50% - 110px);
-}
-
-.placement-zone.apex {
-  top: 180px;
-  left: calc(50% + 10px);
-}
+.placement-zone.sternum { top: 60px;  left: calc(50% - 110px); }
+.placement-zone.apex    { top: 180px; left: calc(50% + 10px); }
+.placement-zone:hover   { border-color: var(--accent); background: rgba(56,189,248,0.08); }
 
 .placed-pad {
   position: absolute;
-  width: 92px;
-  height: 62px;
-  background: #f8fafc;
+  width: 92px; height: 62px;
+  background: #f0f9ff;
   color: #0f172a;
-  border: 2px solid #94a3b8;
+  border: 2px solid #38bdf8;
   border-radius: 8px;
   display: grid;
   place-items: center;
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.placed-pad.sternum { top: 78px;  left: calc(50% - 106px); }
+.placed-pad.apex    { top: 202px; left: calc(50% + 14px); }
+
+/* ─────────────────────────────────────────────────────────────────
+   Defib section — two-column layout
+   ───────────────────────────────────────────────────────────────── */
+.defib-layout {
+  display: grid;
+  grid-template-columns: 1fr 270px;
+  gap: 1rem;
+  align-items: start;
+  margin-top: 0.75rem;
 }
 
-.placed-pad.sternum {
-  top: 78px;
-  left: calc(50% - 106px);
-}
+/* ─────────────────────────────────────────────────────────────────
+   Device image wrapper + overlay positioning context
+   All overlay buttons use position:absolute with % coordinates
+   tuned to the physical button locations on the R Series photo.
 
-.placed-pad.apex {
-  top: 202px;
-  left: calc(50% + 14px);
-}
-
-.defib {
-  border-radius: 12px;
-  padding: 1rem;
-  background: linear-gradient(180deg, #1f2937, #111827);
-  border: 1px solid #6b7280;
-}
-
+   Image natural dimensions: 1138 × 998  →  aspect-ratio 1138/998
+   ───────────────────────────────────────────────────────────────── */
 .defib-image-wrap {
   position: relative;
-  margin-bottom: 1rem;
   aspect-ratio: 1138 / 998;
-  background: #0f172a;
-  border-radius: 8px;
-  overflow: hidden;
+  background: #000;
+  border-radius: 10px;
+  overflow: visible; /* allow glow effects to extend beyond bounds */
 }
 
 .defib-image {
@@ -151,78 +156,373 @@ button:hover {
   height: 100%;
   object-fit: contain;
   display: block;
+  border-radius: 10px;
+  pointer-events: none;
+  user-select: none;
 }
 
+/* ── ECG screen ──────────────────────────────────────────────── */
 .screen-wrap {
   position: absolute;
   top: 23.7%;
   left: 16.2%;
   width: 43.9%;
-  border: 4px solid #0f172a;
-  border-radius: 4px;
+  border: 3px solid #020617;
+  border-radius: 3px;
   overflow: hidden;
-  background: #020617;
-  pointer-events: none;
+  background: #000;
+  pointer-events: none; /* pass clicks through to buttons below */
+  z-index: 2;
 }
-
-#ekg-screen {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.screen-overlay {
+#ekg-screen   { width: 100%; height: auto; display: block; }
+.screen-off   {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
   background: #000;
-  color: #64748b;
-  font-size: 1.5rem;
-  letter-spacing: 0.12em;
+  transition: opacity 0.3s;
 }
+.screen-off.hidden { opacity: 0; pointer-events: none; }
 
-.screen-label,
-.energy-label {
+/* ── Base overlay button style ───────────────────────────────── */
+/* Overlay buttons are transparent by default so the device photo
+   shows through; a subtle highlight on hover reveals clickability. */
+.ov-btn, .mode-btn, .pacer-adj {
   position: absolute;
-  background: rgba(2, 6, 23, 0.75);
-  padding: 0.2rem 0.45rem;
-  border-radius: 6px;
-  border: 1px solid #334155;
-  font-size: 0.84rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  border-radius: 4px;
+  color: transparent; /* text hidden — device image provides the label */
+  font-size: 0.5rem;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  z-index: 5;
+}
+.ov-btn:hover, .mode-btn:hover, .pacer-adj:hover {
+  background: rgba(56, 189, 248, 0.22);
+  border-color: var(--accent);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.45);
+  color: transparent;
+}
+.ov-btn:disabled, .mode-btn:disabled, .pacer-adj:disabled {
+  background: transparent;
+  border-color: rgba(255,255,255,0.08);
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.ov-btn:focus-visible, .mode-btn:focus-visible, .pacer-adj:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  color: transparent;
 }
 
-.screen-label {
-  top: 8px;
-  left: 8px;
+/* ── Soft keys (6 below screen) ─────────────────────────────── */
+.sk {
+  position: absolute;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 3px;
+  color: #94a3b8;
+  font-size: 0.5rem;
+  padding: 0;
+  cursor: pointer;
+  overflow: hidden;
+  z-index: 5;
+  transition: background 0.15s, border-color 0.15s;
+  height: 4.2%;
+  width: 6.9%;
+}
+.sk:hover { background: rgba(56,189,248,0.18); border-color: var(--accent); }
+.sk:disabled { opacity: 0.3; cursor: default; }
+
+/* Positions: evenly divide the screen width (43.9%) into 6 keys */
+#sk0 { top: 56.5%; left: 16.5%; }
+#sk1 { top: 56.5%; left: 23.7%; }
+#sk2 { top: 56.5%; left: 30.9%; }
+#sk3 { top: 56.5%; left: 38.1%; }
+#sk4 { top: 56.5%; left: 45.3%; }
+#sk5 { top: 56.5%; left: 52.5%; }
+
+/* ── Left column: LEAD / SIZE / ALARM SUSPEND / RECORDER ─────── */
+.lft-btn  { width: 8%; height: 5.5%; }
+#btn-lead     { top: 22.0%; left: 60.5%; }
+#btn-size     { top: 29.5%; left: 60.5%; }
+#btn-alarm    { top: 37.0%; left: 60.5%; height: 7.5%; }
+#btn-recorder { top: 47.0%; left: 60.5%; }
+
+/* ── Step 2: ANALYZE + CHARGE ────────────────────────────────── */
+.analyze-btn { top: 22.0%; left: 69.5%; width: 11%;  height: 7.5%; border-color: rgba(217,119,6,0.4); }
+.charge-btn  { top: 22.0%; left: 81.5%; width: 10%;  height: 7.5%; border-color: rgba(217,119,6,0.4); }
+.analyze-btn:hover, .charge-btn:hover {
+  background: rgba(217,119,6,0.2);
+  border-color: #d97706;
+  box-shadow: 0 0 8px rgba(217,119,6,0.5);
 }
 
-.energy-label {
-  top: 8px;
-  right: 8px;
+/* ── Energy Select ▲ / ▼ ─────────────────────────────────────── */
+.egy-up-btn { top: 31.5%; left: 83.0%; width: 9%; height: 6%;  border-color: rgba(217,119,6,0.3); }
+.egy-dn-btn { top: 39.0%; left: 83.0%; width: 9%; height: 6%;  border-color: rgba(217,119,6,0.3); }
+.egy-up-btn:hover, .egy-dn-btn:hover {
+  background: rgba(217,119,6,0.18);
+  border-color: #d97706;
 }
 
-.controls {
+/* ── Mode knob visual ────────────────────────────────────────── */
+.knob-visual {
+  position: absolute;
+  top: 49%; left: 63%;
+  width: 20%; height: 22%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #555, #1a1a1a 55%, #111);
+  border: 2px solid rgba(255,255,255,0.12);
+  pointer-events: none;
+  z-index: 3;
+}
+.knob-needle {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 42%; height: 3px;
+  background: #ef4444;
+  border-radius: 2px;
+  transform-origin: left center;
+  transform: translate(0, -50%) rotate(0deg);
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+/* ── Mode selector buttons (around the knob) ─────────────────── */
+.mode-btn { border-color: rgba(20,184,166,0.35); }
+.mode-btn:hover {
+  background: rgba(20,184,166,0.22);
+  border-color: var(--pacer-color);
+  box-shadow: 0 0 8px rgba(20,184,166,0.45);
+}
+.mode-btn.active-mode {
+  background: rgba(20,184,166,0.18);
+  border-color: var(--pacer-color);
+  box-shadow: 0 0 10px rgba(20,184,166,0.6);
+}
+
+/* Position each mode selector label around the knob */
+.monitor-btn { top: 52.5%; left: 60.5%; width: 8%;   height: 5.5%; }
+.off-btn     { top: 57.0%; left: 67.5%; width: 6.5%; height: 5.5%; }
+.defib-btn   { top: 52.5%; left: 80.0%; width: 7.5%; height: 5.5%; }
+.pacer-btn   { top: 63.0%; left: 60.5%; width: 8%;   height: 5.5%; }
+
+/* ── SHOCK button (Step 3 — large orange circle) ─────────────── */
+.shock-btn {
+  top: 3.0%; left: 80.5%;
+  width: 11%; height: 14%;
+  border-radius: 50%;
+  border-color: rgba(239,68,68,0.4);
+  background: rgba(239,68,68,0.08);
+}
+.shock-btn:hover {
+  background: rgba(239,68,68,0.28);
+  border-color: var(--danger);
+  box-shadow: 0 0 14px rgba(239,68,68,0.65);
+}
+.shock-btn:disabled {
+  background: transparent;
+  border-color: rgba(239,68,68,0.15);
+  box-shadow: none;
+}
+.shock-btn.shock-armed {
+  background: rgba(239,68,68,0.18);
+  border-color: var(--danger);
+  animation: pulse-shock 0.8s ease-in-out infinite;
+}
+@keyframes pulse-shock {
+  0%, 100% { box-shadow: 0 0 8px rgba(239,68,68,0.5); }
+  50%       { box-shadow: 0 0 20px rgba(239,68,68,0.9); }
+}
+
+/* ── Pacer adjustment buttons (▲ / ▼) ───────────────────────── */
+.pacer-adj {
+  width: 8%; height: 5%;
+  border-color: rgba(20,184,166,0.35);
+}
+.pacer-adj:hover {
+  background: rgba(20,184,166,0.22);
+  border-color: var(--pacer-color);
+}
+
+/* OUTPUT mA controls */
+#btn-output-up { top: 65.0%; left: 60.5%; }
+#btn-output-dn { top: 79.0%; left: 60.5%; }
+
+/* RATE ppm controls */
+#btn-rate-up   { top: 65.0%; left: 81.0%; }
+#btn-rate-dn   { top: 79.0%; left: 81.0%; }
+
+/* ── 4:1 pacing test button ──────────────────────────────────── */
+.four-one-btn {
+  top: 70.5%; left: 72.0%;
+  width: 5.5%; height: 7%;
+  border-radius: 50%;
+  border-color: rgba(20,184,166,0.4);
+}
+.four-one-btn:hover {
+  background: rgba(20,184,166,0.2);
+  border-color: var(--pacer-color);
+}
+
+/* ── Pacer value display labels ──────────────────────────────── */
+.pacer-val {
+  position: absolute;
+  color: #22d3ee;
+  font-size: 0.58rem;
+  font-weight: 700;
+  font-family: monospace;
+  pointer-events: none;
+  z-index: 6;
+  background: rgba(2,6,23,0.7);
+  padding: 1px 3px;
+  border-radius: 3px;
+  text-align: center;
+}
+#output-val { top: 71.5%; left: 60.5%; width: 8%; }
+#rate-val   { top: 71.5%; left: 81.0%; width: 8%; }
+
+.pacer-lbl {
+  position: absolute;
+  color: #64748b;
+  font-size: 0.46rem;
+  font-weight: 600;
+  pointer-events: none;
+  z-index: 6;
+  text-align: center;
+  line-height: 1.1;
+}
+.output-lbl { top: 75%; left: 60.5%; width: 8%; }
+.rate-lbl   { top: 75%; left: 81.0%; width: 8%; }
+
+/* ─────────────────────────────────────────────────────────────────
+   Status / reference panel (aside)
+   ───────────────────────────────────────────────────────────────── */
+.status-panel {
+  background: rgba(15,23,42,0.95);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
   display: grid;
   gap: 0.6rem;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  align-content: start;
+  font-size: 0.82rem;
 }
 
-.controls .shock {
-  background: #7f1d1d;
-  border-color: #f87171;
+.mode-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.mode-label { color: var(--muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.mode-badge {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+.mode-badge.on-monitor { color: var(--ok);         border-color: var(--ok); }
+.mode-badge.on-defib   { color: var(--warn);        border-color: var(--warn); }
+.mode-badge.on-pacer   { color: var(--pacer-color); border-color: var(--pacer-color); }
+
+.device-status-msg {
+  margin: 0;
+  line-height: 1.5;
+  min-height: 2.5rem;
 }
 
-@media (max-width: 880px) {
-  .trainer-grid {
-    grid-template-columns: 1fr;
-  }
+.hint-box {
+  background: rgba(56,189,248,0.07);
+  border: 1px solid rgba(56,189,248,0.25);
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: #cbd5e1;
+  min-height: 3.5rem;
 }
 
-.ok {
-  color: var(--ok);
-}
+.sep { border: none; border-top: 1px solid #1e3a5f; margin: 0; }
 
-.warn {
+.status-panel h3 { font-size: 0.82rem; margin: 0; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+.ref-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.77rem;
+}
+.ref-table tr { border-bottom: 1px solid rgba(30,58,95,0.6); }
+.ref-table td { padding: 0.35rem 0.2rem; vertical-align: top; }
+.step-cell {
   color: var(--warn);
+  font-weight: 700;
+  white-space: nowrap;
+  padding-right: 0.4rem;
+}
+.ref-sub { color: var(--muted); font-size: 0.72rem; }
+
+/* ─────────────────────────────────────────────────────────────────
+   Reference videos section
+   ───────────────────────────────────────────────────────────────── */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0.9rem;
+  margin-top: 0.75rem;
+}
+
+.video-card {
+  background: rgba(15,23,42,0.7);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.9rem;
+  display: grid;
+  gap: 0.4rem;
+  align-content: start;
+  transition: border-color 0.2s;
+}
+.video-card:hover { border-color: #2563eb; }
+
+.video-icon { font-size: 1.6rem; }
+.video-card h4 { margin: 0; font-size: 0.88rem; }
+.video-card p  { margin: 0; font-size: 0.78rem; color: var(--muted); line-height: 1.45; }
+
+.yt-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.3rem;
+  padding: 0.35rem 0.7rem;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: background 0.15s, border-color 0.15s;
+}
+.yt-btn:hover {
+  background: #1e40af;
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Responsive
+   ───────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .trainer-grid { grid-template-columns: 1fr; }
+  .defib-layout { grid-template-columns: 1fr; }
+  .status-panel { order: -1; }
+}
+@media (max-width: 540px) {
+  .video-grid { grid-template-columns: 1fr; }
 }
