@@ -1,5 +1,5 @@
 # Virtual-R-Series
-Interactive webapp for an ZOLL R Series defibrillator. App is built for educational purposes only!
+Interactive webapp for a ZOLL R Series defibrillator. App is built for educational purposes only!
 
 ## Current prototype
 - Pad/electrode placement trainer (sternum/apex practice)
@@ -8,7 +8,7 @@ Interactive webapp for an ZOLL R Series defibrillator. App is built for educatio
   - Simulated dynamic EKG waveform on-screen
 
 ## Run locally
-Open `/home/runner/work/Virtual-R-Series/Virtual-R-Series/index.html` in a browser, or run:
+Open `./index.html` in a browser, or run:
 
 ```bash
 cd /home/runner/work/Virtual-R-Series/Virtual-R-Series

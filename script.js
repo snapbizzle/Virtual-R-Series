@@ -21,6 +21,7 @@ const device = {
   rhythm: 'sinus',
   phase: 0,
 };
+const VF_PROBABILITY = 0.5;
 
 function selectedPad() {
   return [...padRadios].find((radio) => radio.checked)?.value || 'sternum';
@@ -153,7 +154,7 @@ function handleAction(action) {
   }
 
   if (action === 'analyze') {
-    device.rhythm = Math.random() > 0.5 ? 'vf' : 'sinus';
+    device.rhythm = Math.random() > VF_PROBABILITY ? 'vf' : 'sinus';
     device.mode = 'idle';
     setStatus(
       device.rhythm === 'vf'
