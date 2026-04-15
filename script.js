@@ -154,7 +154,7 @@ function handleAction(action) {
   }
 
   if (action === 'analyze') {
-    device.rhythm = Math.random() > VF_PROBABILITY ? 'vf' : 'sinus';
+    device.rhythm = Math.random() < VF_PROBABILITY ? 'vf' : 'sinus';
     device.mode = 'idle';
     setStatus(
       device.rhythm === 'vf'
