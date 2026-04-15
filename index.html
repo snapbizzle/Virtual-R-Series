@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Virtual ZOLL R Series ALS Trainer</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="layout">
+      <header>
+        <h1>Virtual ZOLL R Series ALS Trainer</h1>
+        <p>Interactive educational simulator — for educational purposes only. Not for clinical use.</p>
+      </header>
+
+      <!-- ═══════════════════════════════════════════════════
+           MODULE 1 — Pad / Electrode Placement Trainer
+           ═══════════════════════════════════════════════════ -->
+      <section class="card" aria-labelledby="pad-title">
+        <h2 id="pad-title">1) Pad / Electrode Placement Trainer</h2>
+        <p class="subtle">Select a pad type, then click the correct zone on the torso diagram.</p>
+        <div class="trainer-grid">
+          <fieldset class="pad-selector">
+            <legend>Select pad</legend>
+            <label>
+              <input type="radio" name="pad" value="sternum" checked />
+              Sternum pad <span class="subtle-inline">(anterior – upper right chest)</span>
+            </label>
+            <label>
+              <input type="radio" name="pad" value="apex" />
+              Apex pad <span class="subtle-inline">(lateral – lower left chest)</span>
+            </label>
+            <button id="reset-placement" type="button">Reset placement</button>
+            <p id="placement-status" aria-live="polite">Place both pads to complete training.</p>
+          </fieldset>
+
+          <div class="torso" role="img" aria-label="Torso diagram for pad placement">
+            <button class="placement-zone sternum" data-zone="sternum" type="button"
+              aria-label="Upper right chest — sternum pad zone"></button>
+            <button class="placement-zone apex" data-zone="apex" type="button"
+              aria-label="Lower left lateral chest — apex pad zone"></button>
+            <div class="placed-pad sternum" id="placed-sternum" hidden>Sternum</div>
+            <div class="placed-pad apex" id="placed-apex" hidden>Apex</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════
+           MODULE 2 — Interactive ZOLL R Series ALS Defibrillator
+           Button/knob overlays are positioned directly on the
+           device photo to match the physical control locations.
+           ═══════════════════════════════════════════════════ -->
+      <section class="card" aria-labelledby="defib-title">
+        <h2 id="defib-title">2) Interactive ZOLL R Series ALS Defibrillator</h2>
+        <p class="subtle">
+          Click the <strong>Mode Knob (Step 1)</strong> to power on.
+          Every overlay maps to a physical control. Hover any control to see its function in the panel.
+        </p>
+
+        <div class="defib-layout">
+
+          <!-- ── Device image + interactive overlays ── -->
+          <div class="defib-image-wrap" id="device-wrap">
+            <img
+              class="defib-image"
+              src="https://github.com/user-attachments/assets/30e69544-6771-49bc-98dc-4fd7cee79064"
+              alt="ZOLL R Series ALS defibrillator front panel"
+            />
+
+            <!-- ECG screen overlay -->
+            <div class="screen-wrap" id="screen-wrap">
+              <canvas id="ekg-screen" width="480" height="300"
+                aria-label="ECG monitor screen"></canvas>
+              <div class="screen-off" id="screen-off"></div>
+            </div>
+
+            <!-- ── Soft keys (6) — context-sensitive row below screen ── -->
+            <button class="sk" data-sk="0" id="sk0" type="button" aria-label="Soft key 1"></button>
+            <button class="sk" data-sk="1" id="sk1" type="button" aria-label="Soft key 2"></button>
+            <button class="sk" data-sk="2" id="sk2" type="button" aria-label="Soft key 3"></button>
+            <button class="sk" data-sk="3" id="sk3" type="button" aria-label="Soft key 4"></button>
+            <button class="sk" data-sk="4" id="sk4" type="button" aria-label="Soft key 5"></button>
+            <button class="sk" data-sk="5" id="sk5" type="button" aria-label="Soft key 6"></button>
+
+            <!-- ── LEFT COLUMN: LEAD / SIZE / ALARM SUSPEND / RECORDER ── -->
+            <button class="ov-btn lft-btn" id="btn-lead" data-action="lead"
+              data-tip="LEAD — Cycles ECG lead: Pads → I → II → III → aVR → aVL → aVF"
+              type="button" aria-label="Lead select">LEAD</button>
+
+            <button class="ov-btn lft-btn" id="btn-size" data-action="size"
+              data-tip="SIZE — Cycles waveform gain: ×0.5 → ×1 → ×2 → AUTO"
+              type="button" aria-label="Size / gain">SIZE</button>
+
+            <button class="ov-btn lft-btn alarm-ov" id="btn-alarm" data-action="alarm"
+              data-tip="ALARM SUSPEND — Silences all audible alarms for 90 seconds. Press again to cancel."
+              type="button" aria-label="Alarm suspend">ALARM<br>SUSPEND</button>
+
+            <button class="ov-btn lft-btn" id="btn-recorder" data-action="recorder"
+              data-tip="RECORDER — Starts / stops the built-in strip chart printer"
+              type="button" aria-label="Recorder">RECORDER</button>
+
+            <!-- ── STEP 2: ANALYZE + CHARGE ── -->
+            <button class="ov-btn analyze-btn" id="btn-analyze" data-action="analyze"
+              data-tip="ANALYZE (Step 2) — Analyzes patient rhythm for shockable pattern. Requires DEFIB mode. Do NOT touch patient during analysis."
+              type="button" aria-label="Analyze rhythm">ANALYZE</button>
+
+            <button class="ov-btn charge-btn" id="btn-charge" data-action="charge"
+              data-tip="CHARGE (Step 2) — Charges capacitors to the selected energy level. Requires DEFIB mode. Can also charge manually without analyzing."
+              type="button" aria-label="Charge defibrillator">CHARGE</button>
+
+            <!-- ── ENERGY SELECT ▲ / ▼ ── -->
+            <button class="ov-btn egy-up-btn" id="btn-energy-up" data-action="energy-up"
+              data-tip="ENERGY SELECT ▲ — Increases selected defibrillation energy (1→2→5→10→20→30→50→100→150→200 J)"
+              type="button" aria-label="Energy up">▲</button>
+
+            <button class="ov-btn egy-dn-btn" id="btn-energy-dn" data-action="energy-dn"
+              data-tip="ENERGY SELECT ▼ — Decreases selected defibrillation energy. Changing energy while charged disarms the device."
+              type="button" aria-label="Energy down">▼</button>
+
+            <!-- ── STEP 1: MODE KNOB (MONITOR / OFF / DEFIB / PACER) ── -->
+            <!-- Visual knob graphic -->
+            <div class="knob-visual" id="knob-visual" aria-hidden="true">
+              <div class="knob-needle" id="knob-needle"></div>
+            </div>
+            <!-- Four clickable mode-select buttons around the knob -->
+            <button class="mode-btn monitor-btn" data-mode="monitor"
+              data-tip="MONITOR (Step 1) — Powers on ECG monitoring only. Defibrillation and pacing not available."
+              type="button" aria-label="Mode: Monitor">MONITOR</button>
+
+            <button class="mode-btn off-btn" data-mode="off"
+              data-tip="OFF (Step 1) — Powers the device off completely. All functions disabled."
+              type="button" aria-label="Mode: Off">OFF</button>
+
+            <button class="mode-btn defib-btn" data-mode="defib"
+              data-tip="DEFIB (Step 1) — Activates defibrillation mode. Enables ANALYZE → CHARGE → SHOCK workflow (Steps 2 &amp; 3)."
+              type="button" aria-label="Mode: Defibrillator">DEFIB</button>
+
+            <button class="mode-btn pacer-btn" data-mode="pacer"
+              data-tip="PACER (Step 1) — Activates external transcutaneous cardiac pacing. Adjust OUTPUT mA and RATE ppm to initiate pacing."
+              type="button" aria-label="Mode: Pacer">PACER</button>
+
+            <!-- ── STEP 3: SHOCK ── -->
+            <button class="ov-btn shock-btn" id="btn-shock" data-action="shock"
+              data-tip="SHOCK (Step 3) — Delivers defibrillation shock at the charged energy level. STAND CLEAR of patient before pressing!"
+              type="button" aria-label="Deliver shock">SHOCK</button>
+
+            <!-- ── PACER: OUTPUT mA knob ── -->
+            <button class="pacer-adj" id="btn-output-up" data-action="output-up"
+              data-tip="OUTPUT ▲ — Increases pacing output current (0 → 140 mA in 10 mA steps). Pacing begins when output > 0 mA."
+              type="button" aria-label="Output up">▲</button>
+            <div class="pacer-val" id="output-val">0 mA</div>
+            <div class="pacer-lbl output-lbl" aria-hidden="true">OUTPUT<br>mA</div>
+            <button class="pacer-adj" id="btn-output-dn" data-action="output-dn"
+              data-tip="OUTPUT ▼ — Decreases pacing output current. Pacing stops when output reaches 0 mA."
+              type="button" aria-label="Output down">▼</button>
+
+            <!-- ── PACER: 4:1 test ── -->
+            <button class="ov-btn four-one-btn" id="btn-four-one" data-action="four-one"
+              data-tip="4:1 — Pacing threshold test: delivers one paced beat for every 4 intrinsic beats to determine the minimum capture threshold."
+              type="button" aria-label="4:1 pacing test">4:1</button>
+
+            <!-- ── PACER: RATE ppm knob ── -->
+            <button class="pacer-adj" id="btn-rate-up" data-action="rate-up"
+              data-tip="RATE ▲ — Increases pacing rate (30 → 180 ppm in 10 ppm steps)"
+              type="button" aria-label="Rate up">▲</button>
+            <div class="pacer-val" id="rate-val">70 ppm</div>
+            <div class="pacer-lbl rate-lbl" aria-hidden="true">RATE<br>ppm</div>
+            <button class="pacer-adj" id="btn-rate-dn" data-action="rate-dn"
+              data-tip="RATE ▼ — Decreases pacing rate"
+              type="button" aria-label="Rate down">▼</button>
+
+          </div><!-- end device-wrap -->
+
+          <!-- ── Status / reference panel ── -->
+          <aside class="status-panel" id="status-panel">
+            <div class="mode-row">
+              <span class="mode-label">Mode</span>
+              <span class="mode-badge" id="mode-badge">OFF</span>
+            </div>
+
+            <p id="device-status" aria-live="polite" class="device-status-msg">
+              Device is off. Click the Mode Knob (Step 1) to begin.
+            </p>
+
+            <div class="hint-box" id="hint-box">
+              <strong>💡 Hover a control</strong><br>
+              to see its function here.
+            </div>
+
+            <hr class="sep" />
+            <h3>Quick Reference</h3>
+            <table class="ref-table">
+              <tr>
+                <td class="step-cell">①</td>
+                <td><strong>Mode Knob</strong><br><span class="ref-sub">OFF / MONITOR / DEFIB / PACER</span></td>
+              </tr>
+              <tr>
+                <td class="step-cell">②</td>
+                <td><strong>ANALYZE or CHARGE</strong><br><span class="ref-sub">Rhythm analysis + charge capacitors</span></td>
+              </tr>
+              <tr>
+                <td class="step-cell">③</td>
+                <td><strong>SHOCK</strong><br><span class="ref-sub">Deliver shock when charged &amp; clear</span></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td><strong>ENERGY ▲ / ▼</strong><br><span class="ref-sub">Select defibrillation energy (J)</span></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td><strong>LEAD / SIZE</strong><br><span class="ref-sub">ECG lead selection, waveform gain</span></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td><strong>ALARM SUSPEND</strong><br><span class="ref-sub">Silence alarms for 90 seconds</span></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td><strong>RECORDER</strong><br><span class="ref-sub">Start / stop strip chart printer</span></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td><strong>OUTPUT mA / RATE ppm</strong><br><span class="ref-sub">Pacing current and rate (PACER mode)</span></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td><strong>4:1</strong><br><span class="ref-sub">Pacing threshold test (PACER mode)</span></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td><strong>Soft keys (6)</strong><br><span class="ref-sub">Context-sensitive screen functions</span></td>
+              </tr>
+            </table>
+          </aside>
+
+        </div><!-- end defib-layout -->
+        <p class="subtle">For educational use only — not for clinical practice.</p>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════
+           MODULE 3 — Reference Videos
+           YouTube search links for each core operational topic.
+           ═══════════════════════════════════════════════════ -->
+      <section class="card" aria-labelledby="videos-title">
+        <h2 id="videos-title">3) Reference Videos</h2>
+        <p class="subtle">
+          YouTube has excellent videos demonstrating real ZOLL R Series operation.
+          Each link opens a targeted search for that topic.
+        </p>
+
+        <div class="video-grid">
+
+          <div class="video-card">
+            <div class="video-icon">📺</div>
+            <h4>Device Overview &amp; Panel Orientation</h4>
+            <p>General introduction to the R Series front panel, indicators, and button layout.</p>
+            <a class="yt-btn"
+              href="https://www.youtube.com/results?search_query=ZOLL+R+Series+ALS+defibrillator+overview+panel+tutorial"
+              target="_blank" rel="noopener noreferrer">Search YouTube ↗</a>
+          </div>
+
+          <div class="video-card">
+            <div class="video-icon">⚡</div>
+            <h4>Manual Defibrillation Workflow</h4>
+            <p>Step-by-step ANALYZE → CHARGE → SHOCK workflow for shockable rhythms (VF / pVT).</p>
+            <a class="yt-btn"
+              href="https://www.youtube.com/results?search_query=ZOLL+R+Series+manual+defibrillation+ALS+analyze+charge+shock"
+              target="_blank" rel="noopener noreferrer">Search YouTube ↗</a>
+          </div>
+
+          <div class="video-card">
+            <div class="video-icon">💓</div>
+            <h4>Transcutaneous Pacing</h4>
+            <p>Setting up external pacing on the R Series — OUTPUT mA, RATE ppm, capture, and threshold testing.</p>
+            <a class="yt-btn"
+              href="https://www.youtube.com/results?search_query=ZOLL+R+Series+transcutaneous+pacing+output+rate+tutorial"
+              target="_blank" rel="noopener noreferrer">Search YouTube ↗</a>
+          </div>
+
+          <div class="video-card">
+            <div class="video-icon">📋</div>
+            <h4>12-Lead ECG Acquisition</h4>
+            <p>Acquiring a 12-lead ECG for rhythm interpretation and STEMI identification in the field.</p>
+            <a class="yt-btn"
+              href="https://www.youtube.com/results?search_query=ZOLL+R+Series+12+lead+ECG+acquisition+ALS"
+              target="_blank" rel="noopener noreferrer">Search YouTube ↗</a>
+          </div>
+
+          <div class="video-card">
+            <div class="video-icon">🫀</div>
+            <h4>CPR Feedback (Real CPR Help™)</h4>
+            <p>Using ZOLL's Real CPR Help™ to guide compression depth and rate during resuscitation.</p>
+            <a class="yt-btn"
+              href="https://www.youtube.com/results?search_query=ZOLL+Real+CPR+Help+R+Series+compression+feedback"
+              target="_blank" rel="noopener noreferrer">Search YouTube ↗</a>
+          </div>
+
+          <div class="video-card">
+            <div class="video-icon">📡</div>
+            <h4>ECG Monitoring &amp; Lead Placement</h4>
+            <p>Continuous ECG monitoring, lead selection, gain adjustment, and alarm configuration.</p>
+            <a class="yt-btn"
+              href="https://www.youtube.com/results?search_query=ZOLL+R+Series+ECG+monitoring+lead+placement+ALS"
+              target="_blank" rel="noopener noreferrer">Search YouTube ↗</a>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
